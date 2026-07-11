@@ -326,6 +326,9 @@ const dictionary = {
   }
 };
 
+// Application API Host Base URL
+const API_BASE = 'https://stadiumiq-l216.onrender.com';
+
 // Application State Manager
 const state = {
   currentLanguage: "en",
@@ -640,17 +643,17 @@ function toggleTheme() {
 async function loadData() {
   try {
     // 1. Fetch Stadiums List
-    const stadiumsRes = await fetch("/api/stadiums");
+    const stadiumsRes = await fetch(`${API_BASE}/api/stadiums`);
     const stadiumsData = await stadiumsRes.json();
     state.stadiums = stadiumsData.data || [];
 
     // 2. Fetch Matches List
-    const matchesRes = await fetch("/api/matches");
+    const matchesRes = await fetch(`${API_BASE}/api/matches`);
     const matchesData = await matchesRes.json();
     state.matches = matchesData.data || [];
 
     // 3. Fetch Operational Analytics
-    const analyticsRes = await fetch("/api/analytics");
+    const analyticsRes = await fetch(`${API_BASE}/api/analytics`);
     const analyticsData = await analyticsRes.json();
     state.analytics = analyticsData.data || {};
 
@@ -875,7 +878,7 @@ async function handleFindNearest() {
     el.nearestResult.classList.remove("hidden");
     el.nearestResult.innerHTML = `<div class="loader" style="margin: 10px auto; width: 25px; height: 25px;"></div>`;
 
-    const res = await fetch(`/api/stadiums/nearest?lat=${lat}&lng=${lng}`);
+    const res = await fetch(`${API_BASE}/api/stadiums/nearest?lat=${lat}&lng=${lng}`);
     const resData = await res.json();
 
     if (resData.status === "success" && resData.data) {
@@ -928,7 +931,7 @@ async function submitChatMessage(text) {
   scrollToBottom();
 
   try {
-    const res = await fetch("/api/chat", {
+    const res = await fetch(`${API_BASE}/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1066,9 +1069,9 @@ async function fetchOpsData() {
 
   try {
     const [crowdRes, staffRes, incidentRes] = await Promise.all([
-      fetch("/api/analytics/crowd"),
-      fetch("/api/analytics/staff"),
-      fetch("/api/analytics/incidents")
+      fetch(`${API_BASE}/api/analytics/crowd`),
+      fetch(`${API_BASE}/api/analytics/staff`),
+      fetch(`${API_BASE}/api/analytics/incidents`)
     ]);
 
     const [crowdData, staffData, incidentData] = await Promise.all([
@@ -1326,7 +1329,7 @@ async function handleIncidentSubmit(e) {
   opsEl.submitMsg.className = "submit-feedback";
 
   try {
-    const res = await fetch("/api/analytics/incident", {
+    const res = await fetch(`${API_BASE}/api/analytics/incident`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -1341,7 +1344,7 @@ async function handleIncidentSubmit(e) {
       opsEl.incidentForm.reset();
       opsEl.incCharCount.textContent = "0 / 500";
       // Refresh incident log to show the new entry
-      const incRes = await fetch("/api/analytics/incidents");
+      const incRes = await fetch(`${API_BASE}/api/analytics/incidents`);
       const incData = await incRes.json();
       if (incData.status === "success") renderIncidentLog(incData.data);
     } else {
