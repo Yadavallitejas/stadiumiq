@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="StadiumIQ - FIFA World Cup 2026 Smart Stadium Operations Platform. Real-time analytics, schedules, and Gemini-powered operations AI assistant.">
+  <title>StadiumIQ - FIFA World Cup 2026 Smart Stadium Operations</title>
+  
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Local Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+  
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link" id="skip-link">Skip to main content</a>
+
+  <!-- Header Section -->
+  <header class="app-header" role="banner">
+    <div class="header-container">
+      <div class="logo-area">
+        <span class="wc-logo" aria-hidden="true">🏆</span>
+        <div class="logo-text">
+          <h1 id="app-title">StadiumIQ</h1>
+          <p id="app-subtitle" class="text-muted">FIFA World Cup 2026™ Operations</p>
+        </div>
+      </div>
+      
+      <div class="header-controls">
+        <!-- Language Selector -->
+        <div class="control-group">
+          <label for="lang-select" class="sr-only">Choose Language</label>
+          <select id="lang-select" aria-label="Language Selector">
+            <option value="en">English (EN)</option>
+            <option value="es">Español (ES)</option>
+            <option value="fr">Français (FR)</option>
+            <option value="pt">Português (PT)</option>
+            <option value="ar">العربية (AR)</option>
+            <option value="de">Deutsch (DE)</option>
+          </select>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="btn btn-secondary" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Operations Alert Bar -->
+  <section class="alert-bar-section" aria-live="polite" aria-label="Operational Notifications">
+    <div id="ops-alert-container" class="alert-bar-container">
+      <div class="alert-item alert-info" id="alert-banner">
+        <span class="alert-icon" aria-hidden="true">⚡</span>
+        <span class="alert-text" id="alert-text">System Initializing... Connecting to operations control.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Layout -->
+  <div class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <nav class="app-sidebar" role="navigation" aria-label="Main Navigation">
+      <ul class="nav-list" role="tablist">
+        <li role="presentation">
+          <button id="tab-stadiums" class="nav-item active" role="tab" aria-selected="true" aria-controls="panel-stadiums" tabindex="0">
+            <span class="nav-icon" aria-hidden="true">🏟️</span>
+            <span class="nav-text" id="nav-lbl-stadiums">Venues</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button id="tab-matches" class="nav-item" role="tab" aria-selected="false" aria-controls="panel-matches" tabindex="-1">
+            <span class="nav-icon" aria-hidden="true">⚽</span>
+            <span class="nav-text" id="nav-lbl-matches">Fixtures</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button id="tab-analytics" class="nav-item" role="tab" aria-selected="false" aria-controls="panel-analytics" tabindex="-1">
+            <span class="nav-icon" aria-hidden="true">📊</span>
+            <span class="nav-text" id="nav-lbl-analytics">Control Room</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button id="tab-ops" class="nav-item" role="tab" aria-selected="false" aria-controls="panel-ops" tabindex="-1">
+            <span class="nav-icon" aria-hidden="true">🎛️</span>
+            <span class="nav-text" id="nav-lbl-ops">Ops Dashboard</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button id="tab-chat" class="nav-item" role="tab" aria-selected="false" aria-controls="panel-chat" tabindex="-1">
+            <span class="nav-icon" aria-hidden="true">🤖</span>
+            <span class="nav-text" id="nav-lbl-chat">Gemini Assistant</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content Panels -->
+    <main id="main-content" class="app-main" role="main">
+
+      <!-- STADIUMS PANEL -->
+      <section id="panel-stadiums" class="tab-panel active" role="tabpanel" aria-labelledby="tab-stadiums" tabindex="0">
+        <div class="panel-header">
+          <h2 id="stadiums-title">Tournament Host Venues</h2>
+          <p id="stadiums-desc" class="text-muted">Review, filter, and inspect the 16 official stadiums across North America.</p>
+        </div>
+
+        <!-- Geolocation & Filter Controls -->
+        <div class="controls-card">
+          <div class="geolocate-section">
+            <h3 id="geo-lbl">Find Closest Venue</h3>
+            <p id="geo-desc" class="text-muted small">Allow coordinates input to find the nearest World Cup stadium.</p>
+            <div class="geo-inputs">
+              <input type="number" step="any" id="lat-input" placeholder="Latitude (e.g. 40.71)" aria-label="Latitude coordinate">
+              <input type="number" step="any" id="lng-input" placeholder="Longitude (e.g. -74.00)" aria-label="Longitude coordinate">
+              <button id="btn-find-nearest" class="btn btn-primary" aria-describedby="geo-desc">Find Nearest</button>
+            </div>
+            <div id="nearest-result" class="nearest-result-box hidden" aria-live="polite"></div>
+          </div>
+
+          <div class="filter-section">
+            <h3 id="filter-lbl">Filter by Country</h3>
+            <div class="filter-buttons">
+              <button class="btn btn-tab filter-btn active" data-country="all" id="filter-all">All Countries</button>
+              <button class="btn btn-tab filter-btn" data-country="USA" id="filter-usa">United States</button>
+              <button class="btn btn-tab filter-btn" data-country="Canada" id="filter-can">Canada</button>
+              <button class="btn btn-tab filter-btn" data-country="Mexico" id="filter-mex">Mexico</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stadiums Grid -->
+        <div id="stadiums-grid" class="stadiums-grid" aria-live="polite">
+          <!-- Dynamically populated -->
+          <div class="loader" aria-label="Loading stadiums data"></div>
+        </div>
+      </section>
+
+      <!-- MATCHES PANEL -->
+      <section id="panel-matches" class="tab-panel" role="tabpanel" aria-labelledby="tab-matches" tabindex="0" hidden>
+        <div class="panel-header">
+          <h2 id="matches-title">Match Schedule & Live Scores</h2>
+          <p id="matches-desc" class="text-muted">Monitor group stage fixtures, live match statistics, and bracket progress.</p>
+        </div>
+
+        <!-- Match Filters -->
+        <div class="match-filters-bar">
+          <div class="filter-group">
+            <button class="btn btn-tab match-filter-btn active" data-status="all" id="match-all">All Fixtures</button>
+            <button class="btn btn-tab match-filter-btn" data-status="live" id="match-live">Live Matches 🔴</button>
+            <button class="btn btn-tab match-filter-btn" data-status="scheduled" id="match-sched">Upcoming</button>
+            <button class="btn btn-tab match-filter-btn" data-status="completed" id="match-comp">Completed</button>
+          </div>
+        </div>
+
+        <!-- Matches List -->
+        <div id="matches-list" class="matches-list" aria-live="polite">
+          <!-- Dynamically populated -->
+          <div class="loader" aria-label="Loading matches schedule"></div>
+        </div>
+      </section>
+
+      <!-- ANALYTICS PANEL -->
+      <section id="panel-analytics" class="tab-panel" role="tabpanel" aria-labelledby="tab-analytics" tabindex="0" hidden>
+        <div class="panel-header">
+          <h2 id="analytics-title">Operations Control Room</h2>
+          <p id="analytics-desc" class="text-muted">Centralised platform monitoring total capacities, queuing times, and live status.</p>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card" tabindex="0">
+            <div class="kpi-header">
+              <span class="kpi-title" id="kpi-lbl-cap">Total Seating Capacity</span>
+              <span class="kpi-icon" aria-hidden="true">👥</span>
+            </div>
+            <div class="kpi-value" id="kpi-total-capacity">-</div>
+            <div class="kpi-subtext" id="kpi-sub-cap">16 host venues globally</div>
+          </div>
+
+          <div class="kpi-card" tabindex="0">
+            <div class="kpi-header">
+              <span class="kpi-title" id="kpi-lbl-matches">Live Matches Active</span>
+              <span class="kpi-icon" aria-hidden="true">⚽</span>
+            </div>
+            <div class="kpi-value" id="kpi-live-matches">-</div>
+            <div class="kpi-subtext" id="kpi-sub-matches">Real-time score tracking</div>
+          </div>
+
+          <div class="kpi-card" tabindex="0">
+            <div class="kpi-header">
+              <span class="kpi-title" id="kpi-lbl-wait">Average Queue Time</span>
+              <span class="kpi-icon" aria-hidden="true">⏱️</span>
+            </div>
+            <div class="kpi-value" id="kpi-avg-wait">-</div>
+            <div class="kpi-subtext" id="kpi-sub-wait">Across all open concessions</div>
+          </div>
+        </div>
+
+        <!-- Visual Analytics Dashboard Rows -->
+        <div class="dashboard-details">
+          <div class="dashboard-card" tabindex="0">
+            <h3 id="chart-lbl-venues">Venues By Host Nation</h3>
+            <div class="chart-container">
+              <div class="bar-chart-row">
+                <span class="chart-row-lbl" id="chart-lbl-usa">USA</span>
+                <div class="chart-bar-bg" aria-hidden="true">
+                  <div class="chart-bar-fill" id="bar-usa" style="width: 0%"></div>
+                </div>
+                <span class="chart-row-val" id="val-usa">0</span>
+              </div>
+              <div class="bar-chart-row">
+                <span class="chart-row-lbl" id="chart-lbl-mex">Mexico</span>
+                <div class="chart-bar-bg" aria-hidden="true">
+                  <div class="chart-bar-fill" id="bar-mex" style="width: 0%"></div>
+                </div>
+                <span class="chart-row-val" id="val-mex">0</span>
+              </div>
+              <div class="bar-chart-row">
+                <span class="chart-row-lbl" id="chart-lbl-can">Canada</span>
+                <div class="chart-bar-bg" aria-hidden="true">
+                  <div class="chart-bar-fill" id="bar-can" style="width: 0%"></div>
+                </div>
+                <span class="chart-row-val" id="val-can">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-card" tabindex="0">
+            <h3 id="busy-vendor-lbl">Busiest concession queue</h3>
+            <div id="busiest-vendor-info" class="busiest-vendor-box">
+              <div class="loader" aria-label="Loading operational updates"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OPS DASHBOARD PANEL -->
+      <section id="panel-ops" class="tab-panel" role="tabpanel" aria-labelledby="tab-ops" tabindex="0" hidden>
+        <div class="panel-header ops-panel-header">
+          <div>
+            <h2 id="ops-title">Stadium Operations Dashboard</h2>
+            <p id="ops-desc" class="text-muted">Live crowd density, staff deployment, and incident management for venue staff.</p>
+          </div>
+          <div class="ops-refresh-status" aria-live="polite">
+            <span class="refresh-dot" id="refresh-dot" aria-hidden="true"></span>
+            <span id="ops-refresh-label" class="text-muted small">Auto-refresh: 30s</span>
+            <span id="ops-last-refresh" class="text-muted small"></span>
+          </div>
+        </div>
+
+        <!-- ── SECTION 1: CROWD DENSITY ─────────────────── -->
+        <div class="ops-section-title">
+          <span aria-hidden="true">👥</span>
+          <h3 id="crowd-section-lbl">Live Crowd Density by Zone</h3>
+          <div class="density-legend" aria-label="Density colour key">
+            <span class="legend-dot dot-green"></span><span class="text-muted small">Under 60%</span>
+            <span class="legend-dot dot-yellow"></span><span class="text-muted small">60–80%</span>
+            <span class="legend-dot dot-red"></span><span class="text-muted small">Over 80%</span>
+          </div>
+        </div>
+
+        <div id="crowd-grid" class="crowd-grid" aria-live="polite" aria-label="Crowd density per zone">
+          <!-- Dynamically rendered zone cards with SVG gauges -->
+          <div class="loader" aria-label="Loading crowd density data"></div>
+        </div>
+
+        <!-- ── SECTION 2: STAFF DEPLOYMENT TABLE ─────────── -->
+        <div class="ops-section-title" style="margin-top:30px;">
+          <span aria-hidden="true">🦺</span>
+          <h3 id="staff-section-lbl">Staff Deployment Recommendations</h3>
+        </div>
+
+        <div class="staff-table-wrapper" role="region" aria-label="Staff deployment table">
+          <table class="staff-table" id="staff-table" aria-describedby="staff-section-lbl">
+            <thead>
+              <tr>
+                <th scope="col">Zone</th>
+                <th scope="col">Occupancy</th>
+                <th scope="col">Assigned Staff</th>
+                <th scope="col">Recommended</th>
+                <th scope="col">Gap</th>
+                <th scope="col">Alert Level</th>
+              </tr>
+            </thead>
+            <tbody id="staff-tbody" aria-live="polite">
+              <tr><td colspan="6" class="table-loading"><div class="loader" style="margin:20px auto;width:30px;height:30px;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ── SECTION 3: INCIDENT LOG ───────────────────── -->
+        <div class="ops-section-title" style="margin-top:30px;">
+          <span aria-hidden="true">🚨</span>
+          <h3 id="incident-section-lbl">Active Incident Log</h3>
+        </div>
+
+        <div id="incident-log" class="incident-log" aria-live="polite" aria-label="Incident log">
+          <div class="loader" aria-label="Loading incident data"></div>
+        </div>
+
+        <!-- ── SECTION 4: REPORT INCIDENT FORM ───────────── -->
+        <div class="ops-section-title" style="margin-top:30px;">
+          <span aria-hidden="true">📋</span>
+          <h3 id="report-section-lbl">Report New Incident</h3>
+        </div>
+
+        <div class="report-form-card">
+          <form id="incident-form" novalidate aria-labelledby="report-section-lbl">
+            <div class="form-grid">
+              <!-- Zone -->
+              <div class="form-group">
+                <label for="inc-zone" class="form-label">Zone <span class="required-star" aria-label="required">*</span></label>
+                <select id="inc-zone" name="zone" class="form-select" required aria-required="true" aria-describedby="inc-zone-err">
+                  <option value="">Select zone…</option>
+                  <option value="A">Zone A — Lower Bowl, Pitch Side</option>
+                  <option value="B">Zone B — Lower Bowl, End Stands</option>
+                  <option value="C">Zone C — Mid-Tier, Main Stand</option>
+                  <option value="D">Zone D — Mid-Tier, Away End</option>
+                  <option value="E">Zone E — Upper Tier, East</option>
+                  <option value="F">Zone F — Upper Tier, West</option>
+                </select>
+                <span id="inc-zone-err" class="form-error" role="alert" aria-live="assertive"></span>
+              </div>
+
+              <!-- Type -->
+              <div class="form-group">
+                <label for="inc-type" class="form-label">Incident Type <span class="required-star" aria-label="required">*</span></label>
+                <select id="inc-type" name="type" class="form-select" required aria-required="true" aria-describedby="inc-type-err">
+                  <option value="">Select type…</option>
+                  <option value="Medical">Medical Emergency</option>
+                  <option value="Security">Security Breach</option>
+                  <option value="Crowd Control">Crowd Control</option>
+                  <option value="Fire Safety">Fire Safety</option>
+                  <option value="Infrastructure">Infrastructure Issue</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span id="inc-type-err" class="form-error" role="alert" aria-live="assertive"></span>
+              </div>
+
+              <!-- Severity -->
+              <div class="form-group">
+                <label class="form-label">Severity <span class="required-star" aria-label="required">*</span></label>
+                <div class="severity-radio-group" role="radiogroup" aria-required="true" aria-describedby="inc-sev-err">
+                  <label class="severity-radio sev-low">
+                    <input type="radio" name="severity" value="low" aria-label="Low severity">
+                    <span>🟢 Low</span>
+                  </label>
+                  <label class="severity-radio sev-medium">
+                    <input type="radio" name="severity" value="medium" aria-label="Medium severity">
+                    <span>🟡 Medium</span>
+                  </label>
+                  <label class="severity-radio sev-high">
+                    <input type="radio" name="severity" value="high" aria-label="High severity">
+                    <span>🔴 High</span>
+                  </label>
+                </div>
+                <span id="inc-sev-err" class="form-error" role="alert" aria-live="assertive"></span>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group" style="margin-top:15px;">
+              <label for="inc-desc" class="form-label">
+                Description <span class="required-star" aria-label="required">*</span>
+                <span class="text-muted small">(10–500 characters)</span>
+              </label>
+              <textarea id="inc-desc" name="description" class="form-textarea" rows="3"
+                placeholder="Describe the incident in detail…"
+                required aria-required="true" minlength="10" maxlength="500"
+                aria-describedby="inc-desc-err inc-char-count"></textarea>
+              <div class="textarea-footer">
+                <span id="inc-desc-err" class="form-error" role="alert" aria-live="assertive"></span>
+                <span id="inc-char-count" class="text-muted small char-count">0 / 500</span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="btn-report-incident" class="btn btn-danger-primary" aria-label="Submit incident report">
+                <span aria-hidden="true">🚨</span> Report Incident
+              </button>
+              <span id="form-submit-msg" class="submit-feedback" aria-live="polite"></span>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- CHAT PANEL -->
+      <section id="panel-chat" class="tab-panel" role="tabpanel" aria-labelledby="tab-chat" tabindex="0" hidden>
+        <div class="panel-header">
+          <h2 id="chat-title">Gemini Operations Assistant</h2>
+          <p id="chat-desc" class="text-muted">Ask operational questions about stadiums, scheduling fixtures, or concession wait times.</p>
+        </div>
+
+        <div class="chat-container-box">
+          <!-- Chat Messages Window -->
+          <div id="chat-messages" class="chat-messages" aria-live="polite" aria-label="Chat messages history">
+            <div class="chat-bubble bot-bubble">
+              <p id="chat-welcome-msg">Welcome to StadiumIQ Ops Assistant. Please select a quick command below or type your operational query.</p>
+            </div>
+          </div>
+          
+          <!-- Quick Prompts Buttons -->
+          <div class="quick-prompts" aria-label="Suggested Queries">
+            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp1">Show all venues</button>
+            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp2">What matches are live today?</button>
+            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp3">Which queue is the longest?</button>
+          </div>
+
+          <!-- Chat Inputs Form -->
+          <form id="chat-form" class="chat-form" role="search" aria-label="Submit Operational Query">
+            <input type="text" id="chat-input" placeholder="Type your query here..." aria-label="Operations query text" required>
+            <button type="submit" id="chat-submit" class="btn btn-primary" aria-label="Send Query">Send</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="app-footer" role="contentinfo">
+    <p>&copy; 2026 FIFA World Cup™ Smart Operations Platform. Powered by Gemini 1.5 Flash. Secure Ops System.</p>
+  </footer>
+
+  <!-- Script Inclusion -->
+  <script src="app.js"></script>
+</body>
+</html>
