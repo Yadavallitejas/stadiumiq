@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- lang attribute is updated dynamically by app.js translateUI() when the user switches language -->
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
@@ -126,11 +127,11 @@
 
           <div class="filter-section">
             <h3 id="filter-lbl">Filter by Country</h3>
-            <div class="filter-buttons">
-              <button class="btn btn-tab filter-btn active" data-country="all" id="filter-all">All Countries</button>
-              <button class="btn btn-tab filter-btn" data-country="USA" id="filter-usa">United States</button>
-              <button class="btn btn-tab filter-btn" data-country="Canada" id="filter-can">Canada</button>
-              <button class="btn btn-tab filter-btn" data-country="Mexico" id="filter-mex">Mexico</button>
+            <div class="filter-buttons" role="group" aria-labelledby="filter-lbl">
+              <button class="btn btn-tab filter-btn active" data-country="all" id="filter-all" aria-label="Show all countries" aria-pressed="true">All Countries</button>
+              <button class="btn btn-tab filter-btn" data-country="USA" id="filter-usa" aria-label="Filter USA stadiums" aria-pressed="false">United States</button>
+              <button class="btn btn-tab filter-btn" data-country="Canada" id="filter-can" aria-label="Filter Canada stadiums" aria-pressed="false">Canada</button>
+              <button class="btn btn-tab filter-btn" data-country="Mexico" id="filter-mex" aria-label="Filter Mexico stadiums" aria-pressed="false">Mexico</button>
             </div>
           </div>
         </div>
@@ -151,11 +152,11 @@
 
         <!-- Match Filters -->
         <div class="match-filters-bar">
-          <div class="filter-group">
-            <button class="btn btn-tab match-filter-btn active" data-status="all" id="match-all">All Fixtures</button>
-            <button class="btn btn-tab match-filter-btn" data-status="live" id="match-live">Live Matches 🔴</button>
-            <button class="btn btn-tab match-filter-btn" data-status="scheduled" id="match-sched">Upcoming</button>
-            <button class="btn btn-tab match-filter-btn" data-status="completed" id="match-comp">Completed</button>
+          <div class="filter-group" role="group" aria-label="Filter matches by status">
+            <button class="btn btn-tab match-filter-btn active" data-status="all" id="match-all" aria-label="Show all fixtures" aria-pressed="true">All Fixtures</button>
+            <button class="btn btn-tab match-filter-btn" data-status="live" id="match-live" aria-label="Show live matches" aria-pressed="false">Live Matches 🔴</button>
+            <button class="btn btn-tab match-filter-btn" data-status="scheduled" id="match-sched" aria-label="Show upcoming scheduled matches" aria-pressed="false">Upcoming</button>
+            <button class="btn btn-tab match-filter-btn" data-status="completed" id="match-comp" aria-label="Show completed matches" aria-pressed="false">Completed</button>
           </div>
         </div>
 
@@ -382,10 +383,10 @@
             </div>
 
             <div class="form-actions">
-              <button type="submit" id="btn-report-incident" class="btn btn-danger-primary" aria-label="Submit incident report">
+              <button type="submit" id="btn-report-incident" class="btn btn-danger-primary" aria-label="Submit incident report to operations">
                 <span aria-hidden="true">🚨</span> Report Incident
               </button>
-              <span id="form-submit-msg" class="submit-feedback" aria-live="polite"></span>
+              <span id="form-submit-msg" class="submit-feedback" role="status" aria-live="polite"></span>
             </div>
           </form>
         </div>
@@ -407,16 +408,17 @@
           </div>
           
           <!-- Quick Prompts Buttons -->
-          <div class="quick-prompts" aria-label="Suggested Queries">
-            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp1">Show all venues</button>
-            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp2">What matches are live today?</button>
-            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp3">Which queue is the longest?</button>
+          <div class="quick-prompts" role="group" aria-label="Suggested quick queries">
+            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp1" aria-label="Quick query: Show all venues">Show all venues</button>
+            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp2" aria-label="Quick query: What matches are live today?">What matches are live today?</button>
+            <button class="btn btn-secondary btn-sm quick-prompt-btn" id="qp3" aria-label="Quick query: Which queue is the longest?">Which queue is the longest?</button>
           </div>
 
           <!-- Chat Inputs Form -->
-          <form id="chat-form" class="chat-form" role="search" aria-label="Submit Operational Query">
-            <input type="text" id="chat-input" placeholder="Type your query here..." aria-label="Operations query text" required>
-            <button type="submit" id="chat-submit" class="btn btn-primary" aria-label="Send Query">Send</button>
+          <form id="chat-form" class="chat-form" aria-label="Submit operational query to Gemini assistant">
+            <label for="chat-input" class="sr-only">Operational query</label>
+            <input type="text" id="chat-input" placeholder="Type your query here..." aria-label="Operations query text" autocomplete="off" required>
+            <button type="submit" id="chat-submit" class="btn btn-primary" aria-label="Send query to Gemini assistant">Send</button>
           </form>
         </div>
       </section>

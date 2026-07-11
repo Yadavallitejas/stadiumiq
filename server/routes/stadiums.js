@@ -48,6 +48,7 @@ router.get("/", (req, res) => {
   res.json({
     status: "success",
     results: filteredStadiums.length,
+    timestamp: new Date().toISOString(),
     data: filteredStadiums
   });
 });
