@@ -218,9 +218,9 @@ app.use("/api/analytics", analyticsRouter);
 app.use("/api/chat",      chatRouter);
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 10. STATIC ASSETS — serve client SPA files
+// 10. STATIC ASSETS — serve static SPA files from docs/
 // ─────────────────────────────────────────────────────────────────────────────
-const clientPath = path.join(__dirname, "../client");
+const clientPath = path.join(__dirname, "../docs");
 app.use(express.static(clientPath, {
   // Aggressive caching for immutable assets; HTML must not be cached
   setHeaders: (res, filePath) => {
